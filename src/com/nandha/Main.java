@@ -3,19 +3,19 @@ package com.nandha;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class Main {
-    public static HttpURLConnection connection;
+    //public static HttpURLConnection connection;
 
     public static void main(String[] args) {
 
         //method 1 : java.net.HttpURLConnection - works with all JDK versions
 
-        BufferedReader reader;
+      /*  BufferedReader reader;
         String line;
         StringBuffer responseContent = new StringBuffer();
         try{
@@ -55,7 +55,13 @@ public class Main {
 
         finally {
             connection.disconnect();
-        }
+        }*/
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://jsonplaceholder.typicode.com/albums")).build();
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(System.out::println)
+                .join();
 
     }
 }
